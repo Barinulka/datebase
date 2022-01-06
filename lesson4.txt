@@ -1,0 +1,25 @@
+1. Преобразовать дату начала потока в таблице потоков к виду год-месяц-день. 
+   Используйте команду UPDATE.
+   UPDATE streams SET started_at = SUBSTR(started_at, 7, 4) || '-' || SUBSTR(started_at, 4, 2) || '-' || SUBSTR(started_at, 1, 2);
+2. Получите идентификатор и номер потока, запланированного на самую позднюю дату.
+   SELECT course_id, number, started_at FROM streams WHERE started_at BETWEEN '2020-12-01' AND '2020-12-31';
+3. Покажите уникальные значения года по датам начала потоков обучения.
+   SELECT DISTINCT(started_at) FROM streams;
+4. Найдите количество преподавателей в базе данных. 
+   Выведите искомое значение в столбец с именем total_teachers.
+   SELECT COUNT(*) AS 'total_teachers' FROM teachers;
+5. Покажите даты начала двух последних по времени потоков.
+   SELECT started_at FROM streams WHERE SUBSTR(started_at, 6, 2) BETWEEN 11 AND 12;
+   Работает, но это кастыльно, т.к. мы не можем точно знать какие у нас даты в таблице, поэтому
+   исправлю код на следующий:
+   SELECT started_at FROM streams ORDER BY started_at DESC LIMIT 2;
+   Так выборка произойдет по последним двум датам.
+   Так же исправим код задания 2, там такие же кастыли:
+   SELECT course_id, number, started_at FROM streams ORDER BY started_at DESC LIMIT 1;
+6. Найдите среднюю успеваемости учеников по потокам преподавателя с идентификатором равным 1.
+   SELECT teacher_id, AVG(grade) AS 'grade' FROM grades WHERE teacher_id = 1 GROUP BY teacher_id;
+7. Дополнительное задание (выполняется по желанию): найдите идентификаторы преподавателей, 
+   у которых средняя успеваемость по всем потокам меньше 4.8.
+   Тут при использовании фун-й типа count/sum/avg ... нужно вместо WHERE использовать HAVING
+   SELECT teacher_id, AVG(grade) AS 'avg_grade' FROM grades GROUP BY teacher_id HAVING avg_grade < 4.8;
+   
